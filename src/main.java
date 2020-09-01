@@ -3,7 +3,7 @@ import java.sql.*;
 public class main {
     public static void main(String[] args) {
         try{
-            Connection con = DriverManager.getConnection( "jdbc:postgresql:://[127.0.0.1]:55255/ovchip", "postgres", "wachtwoord");
+            Connection con = DriverManager.getConnection( "jdbc:postgresql:://localhost/ovchip", "postgres", "wachtwoord");
 
             Statement stm = con.createStatement();
 
