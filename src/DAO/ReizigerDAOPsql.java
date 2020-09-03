@@ -64,7 +64,7 @@ public class ReizigerDAOPsql implements ReizigerDAO {
             Statement stm = con.createStatement();
             ResultSet result = stm.executeQuery("select * from reiziger where reiziger_id = "+id);
             result.next();
-            System.out.println("reiziger gevonden met ID "+ id + " is gevonden!");
+            System.out.println("reiziger met ID "+ id + " is gevonden!");
             return new Reiziger(result.getInt("reiziger_id"), result.getString("voorletters"), result.getString("tussenvoegsel"), result.getString("achternaam"), result.getDate("geboortedatum"));
         }catch(SQLException e){
             System.err.println("er ging iets mis: "+e.getMessage());

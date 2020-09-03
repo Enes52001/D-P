@@ -9,7 +9,7 @@ public class Reiziger {
     private String achternaam;
     private Date geboortedatum;
 
-    public Reiziger(int id, String v, String t, String a, Date g){
+    public Reiziger(int id, String v, String t, String a, Date g) {
         this.id = id;
         this.voorletters = v;
         this.tussenvoegsel = t;
@@ -17,6 +17,7 @@ public class Reiziger {
         this.geboortedatum = g;
 
     }
+    
 
     public int getId(){
         return id;

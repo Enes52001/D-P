@@ -16,24 +16,24 @@ public class Main {
             ResultSet rs = stm.executeQuery("select * from reiziger");
 
             //HIER ONDER IS OPDRACHT P1
-            System.out.println("Alle reizigers:\n");
-
-            while (rs.next()) {
-                String tv;
-                if(rs.getString("tussenvoegsel") == null){
-                     tv = "";
-
-                }else{
-                     tv = rs.getString("tussenvoegsel");
-                }
-
-                System.out.println("   #" + rs.getString("reiziger_id") + ": "
-                        + rs.getString("voorletters")+" "
-                        + tv+" "
-                        + rs.getString("achternaam")+
-                        " (" + rs.getString("geboortedatum") + ")"
-                );
-            }
+//            System.out.println("Alle reizigers:\n");
+//
+//            while (rs.next()) {
+//                String tv;
+//                if(rs.getString("tussenvoegsel") == null){
+//                     tv = "";
+//
+//                }else{
+//                     tv = rs.getString("tussenvoegsel");
+//                }
+//
+//                System.out.println("   #" + rs.getString("reiziger_id") + ": "
+//                        + rs.getString("voorletters")+" "
+//                        + tv+" "
+//                        + rs.getString("achternaam")+
+//                        " (" + rs.getString("geboortedatum") + ")"
+//                );
+//            }
 
 
            // in het klassendiagram staat dat ik een private methode "testreizigerDAO" moet schrijven en daar de CRUD functies in moet testen, maar ik snap niet
@@ -43,23 +43,23 @@ public class Main {
 
             // EIGEN CRUD TESTS, je kan een voor een de dubbele slash's weghalen en uittesten
             Reiziger Enes = new Reiziger(20, "E", "", "Sahin", java.sql.Date.valueOf("2001-12-24"));
-            ReizigerDAOPsql dao = new ReizigerDAOPsql(con);
+            ReizigerDAOPsql reizigerDAO = new ReizigerDAOPsql(con);
 
             // SAVE FUNCTIE
-            //dao.save(Enes);
+            //reizigerDAO.save(Enes);
 
             // DELETE FUNCTIE
-            //dao.delete(Enes);
+            //reizigerDAO.delete(Enes);
 
             // UPDATE FUNCTIE
             //Enes.setAchternaam("Holland");
             //Enes.setGeboortedatum(java.sql.Date.valueOf("1999-10-04"));
-            //dao.update(Enes);
+            //reizigerDAO.update(Enes);
 
             // FIND FUNCTIES
-            //System.out.println(dao.findById(3));
-            //System.out.println(dao.findByGbDatum("2002-09-17"));
-            //System.out.println(dao.findAll());
+            //System.out.println(reizigerDAO.findById(3));
+            //System.out.println(reizigerDAO.findByGbDatum("2002-09-17"));
+            //System.out.println(reizigerDAO.findAll());
 
             /**
              * P2. Reiziger DAO: persistentie van een klasse
@@ -89,6 +89,25 @@ public class Main {
 //
 //                // Voeg aanvullende tests van de ontbrekende CRUD-operaties in.
 //            }
+
+
+
+
+            // OPDRACHT P3 TESTS
+            Adres HU = new Adres(6, "2345CJ", "15", "Heidelberglaan", "Utrecht", 20);
+            AdresDAOPsql adresDAO = new AdresDAOPsql(con);
+
+            //adresDAO.save(HU);
+
+            //adresDAO.delete(HU);
+
+            //HU.setHuisnummer("52");
+            //HU.setWoonplaats("Amersfoort");
+            //adresDAO.update(HU);
+
+            //System.out.println(adresDAO.findById(6));
+
+            System.out.println(adresDAO.findByReizigerId(5));
 
         } catch (SQLException e) {
             System.err.println("er is een fout opgetreden: " + e.getMessage());
