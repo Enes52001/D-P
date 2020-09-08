@@ -7,9 +7,12 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AdresDAOPsql implements AdresDAO {
     private Connection con;
+    private ReizigerDAO rdao;
 
     public AdresDAOPsql(Connection conn) throws SQLException {
         this.con = conn;
@@ -86,6 +89,22 @@ public class AdresDAOPsql implements AdresDAO {
             return new Adres(result.getInt("adres_id"), result.getString("postcode"), result.getString("huisnummer"),
                     result.getString("straat"), result.getString("woonplaats"),  result.getInt("reiziger_id"));
 
+        }catch(SQLException e){
+            System.err.println("er ging iets mis: "+e.getMessage());
+            return null;
+        }
+    }
+
+    @Override
+    public List<Adres> findAll() {
+        try{
+            List<Adres> lijst = new ArrayList<>();
+            Statement stm = con.createStatement();
+            ResultSet result = stm.executeQuery("select * from adres");
+            while(result.next()){
+                lijst.add(new Adres(result.getInt("adres_id"), result.getString("postcode"), result.getString("huisnummer"), result.getString("straat"), result.getString("woonplaats"), result.getInt("reiziger_id")));
+            }
+            return lijst;
         }catch(SQLException e){
             System.err.println("er ging iets mis: "+e.getMessage());
             return null;
