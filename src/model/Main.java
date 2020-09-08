@@ -36,13 +36,10 @@ public class Main {
                 );
             }
 
+            Adres HU = new Adres(6, "2345CJ", "15", "Heidelberglaan", "Utrecht", 6);
+            Reiziger Jan = new Reiziger(6, "J", "van", "Leeuwen", java.sql.Date.valueOf("2001-12-24"));
 
-
-
-
-
-
-
+            
 
 
 
@@ -89,7 +86,6 @@ public class Main {
         // EIGEN CRUD TESTS, je kan een voor een de dubbele slash's weghalen en uittesten
 
         //opdracht p2 tests
-        Reiziger Jan = new Reiziger(6, "J", "van", "Leeuwen", java.sql.Date.valueOf("2001-12-24"));
         ReizigerDAOPsql reizigerDAO = new ReizigerDAOPsql(con);
 
         // SAVE FUNCTIE
@@ -108,8 +104,15 @@ public class Main {
         //System.out.println(reizigerDAO.findByGbDatum("2002-09-17"));
         //System.out.println(reizigerDAO.findAll());
 
+
+    }
+
+    private static void testAdresDAO(AdresDAO adao) throws SQLException {
+        System.out.println("\n---------- Test ReizigerDAO -------------");
+        Connection con = DriverManager.getConnection("jdbc:postgresql://localhost/ovchip?user=postgres&password=wachtwoord");
+
+
         // OPDRACHT P3 TESTS
-        Adres HU = new Adres(6, "2345CJ", "15", "Heidelberglaan", "Utrecht", 6);
         AdresDAOPsql adresDAO = new AdresDAOPsql(con);
 
         //adresDAO.save(HU);
