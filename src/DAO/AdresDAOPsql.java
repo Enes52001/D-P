@@ -24,7 +24,7 @@ public class AdresDAOPsql implements AdresDAO {
             stm.setString(3, a.getHuisnummer());
             stm.setString(4, a.getStraat());
             stm.setString(5, a.getWoonplaats());
-            stm.setInt(6, a.getReiziger_id());
+            stm.setInt(6, a.getReiziger().getId());
             stm.executeUpdate();
 
             System.out.println("Adres is succesvol toegevoegd!");
@@ -79,7 +79,7 @@ public class AdresDAOPsql implements AdresDAO {
             result.next();
             System.out.println("Adres met ID "+ id + " is gevonden!");
             return new Adres(result.getInt("adres_id"), result.getString("postcode"), result.getString("huisnummer"),
-                    result.getString("straat"), result.getString("woonplaats"),  result.getInt("reiziger_id"));
+                    result.getString("straat"), result.getString("woonplaats"));  //result.getInt("reiziger_id")   hier wordt geen reiziger_id meegegeven, hoort dit?
         }catch(SQLException e){
             System.err.println("er ging iets mis: "+e.getMessage());
             return null;
@@ -96,7 +96,7 @@ public class AdresDAOPsql implements AdresDAO {
 
             System.out.println("Adres gekoppeld aan reizigers-ID "+ r + " is gevonden!");
             return new Adres(result.getInt("adres_id"), result.getString("postcode"), result.getString("huisnummer"),
-                    result.getString("straat"), result.getString("woonplaats"),  result.getInt("reiziger_id"));
+                    result.getString("straat"), result.getString("woonplaats"));//  result.getInt("reiziger_id")
 
         }catch(SQLException e){
             System.err.println("er ging iets mis: "+e.getMessage());
@@ -111,7 +111,7 @@ public class AdresDAOPsql implements AdresDAO {
             PreparedStatement stm = con.prepareStatement("select * from adres");
             ResultSet result = stm.executeQuery();
             while(result.next()){
-                lijst.add(new Adres(result.getInt("adres_id"), result.getString("postcode"), result.getString("huisnummer"), result.getString("straat"), result.getString("woonplaats"), result.getInt("reiziger_id")));
+                lijst.add(new Adres(result.getInt("adres_id"), result.getString("postcode"), result.getString("huisnummer"), result.getString("straat"), result.getString("woonplaats")));// result.getInt("reiziger_id")
             }
             return lijst;
         }catch(SQLException e){
