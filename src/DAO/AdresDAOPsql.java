@@ -3,10 +3,7 @@ package DAO;
 import model.Adres;
 import model.Reiziger;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,10 +17,15 @@ public class AdresDAOPsql implements AdresDAO {
     @Override
     public boolean save(Adres a) {
         try{
-            Statement stm = con.createStatement();
-
-            stm.executeUpdate("insert into adres (adres_id, postcode, huisnummer, straat, woonplaats, reiziger_id) \nvalues ( '"
-                            +a.getAdres_id()+"', "+"'"+a.getPostcode()+"', '"+a.getHuisnummer()+"', '"+a.getStraat()+"', '"+a.getWoonplaats()+ "', "+a.getReiziger_id()+")");
+            PreparedStatement stm = con.prepareStatement("insert into adres (adres_id, postcode, huisnummer, straat, woonplaats, reiziger_id) \nvalues " +
+                    "( '?', '?', '?', '?', '?', ?)");
+            stm.setInt(1, a.getAdres_id());
+            stm.setString(2, a.getPostcode());
+            stm.setString(3, a.getHuisnummer());
+            stm.setString(4, a.getStraat());
+            stm.setString(5, a.getWoonplaats());
+            stm.setInt(6, a.getReiziger_id());
+            stm.executeUpdate();
 
             System.out.println("Adres is succesvol toegevoegd!");
             return true;
@@ -37,8 +39,9 @@ public class AdresDAOPsql implements AdresDAO {
     public boolean delete(Adres a) {
         try{
 
-            Statement stm = con.createStatement();
-            stm.executeUpdate("delete from adres where adres_id = "+a.getAdres_id());
+            PreparedStatement stm = con.prepareStatement("delete from adres where adres_id = ?");
+            stm.setInt(1, a.getAdres_id());
+            stm.executeUpdate();
 
             System.out.println("Adres is succesvol verwijderd!");
             return true;
@@ -51,10 +54,14 @@ public class AdresDAOPsql implements AdresDAO {
     @Override
     public boolean update(Adres a) {
         try {
-            Statement stm = con.createStatement();
-            stm.executeUpdate("update adres set postcode = '" + a.getPostcode() + "', " +
-                    "huisnummer = '" + a.getHuisnummer() + "', " + "straat = '" + a.getStraat() + "', " + "woonplaats = '" + a.getWoonplaats() +
-                    "' where adres_id = " + a.getAdres_id());
+            PreparedStatement stm = con.prepareStatement("update adres set postcode = '?', " +
+                    "huisnummer = '?', straat = '?', woonplaats = '?' where adres_id = ?");
+            stm.setString(1, a.getPostcode());
+            stm.setString(2, a.getHuisnummer());
+            stm.setString(3, a.getStraat());
+            stm.setString(4, a.getWoonplaats());
+            stm.setInt(5, a.getAdres_id());
+            stm.executeUpdate();
             return true;
         }catch(SQLException e){
             System.err.println("er ging iets mis: "+e.getMessage());
@@ -66,8 +73,9 @@ public class AdresDAOPsql implements AdresDAO {
     public Adres findById(int id) {
         try{
 
-            Statement stm = con.createStatement();
-            ResultSet result = stm.executeQuery("select * from adres where adres_id = "+id);
+            PreparedStatement stm = con.prepareStatement("select * from adres where adres_id = ?");
+            stm.setInt(1, id);
+            ResultSet result = stm.executeQuery();
             result.next();
             System.out.println("Adres met ID "+ id + " is gevonden!");
             return new Adres(result.getInt("adres_id"), result.getString("postcode"), result.getString("huisnummer"),
@@ -81,8 +89,9 @@ public class AdresDAOPsql implements AdresDAO {
     @Override
     public Adres findByReizigerId(int r) {
         try{
-            Statement stm = con.createStatement();
-            ResultSet result = stm.executeQuery("select * from adres where reiziger_id = "+r);
+            PreparedStatement stm = con.prepareStatement("select * from adres where reiziger_id = ?");
+            stm.setInt(1, r);
+            ResultSet result = stm.executeQuery();
             result.next();
 
             System.out.println("Adres gekoppeld aan reizigers-ID "+ r + " is gevonden!");
@@ -99,8 +108,8 @@ public class AdresDAOPsql implements AdresDAO {
     public List<Adres> findAll() {
         try{
             List<Adres> lijst = new ArrayList<>();
-            Statement stm = con.createStatement();
-            ResultSet result = stm.executeQuery("select * from adres");
+            PreparedStatement stm = con.prepareStatement("select * from adres");
+            ResultSet result = stm.executeQuery();
             while(result.next()){
                 lijst.add(new Adres(result.getInt("adres_id"), result.getString("postcode"), result.getString("huisnummer"), result.getString("straat"), result.getString("woonplaats"), result.getInt("reiziger_id")));
             }

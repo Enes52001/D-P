@@ -39,7 +39,7 @@ public class Main {
             Adres HU = new Adres(6, "2345CJ", "15", "Heidelberglaan", "Utrecht", 6);
             Reiziger Jan = new Reiziger(6, "J", "van", "Leeuwen", java.sql.Date.valueOf("2001-12-24"));
 
-            
+
 
 
 
