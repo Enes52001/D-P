@@ -36,11 +36,12 @@ public class Main {
                 );
             }
 
-            Adres HU = new Adres(6, "2345CJ", "15", "Heidelberglaan", "Utrecht", 6);
+            Adres HU = new Adres(6, "2345CJ", "15", "Heidelberglaan", "Utrecht");
             Reiziger Jan = new Reiziger(6, "J", "van", "Leeuwen", java.sql.Date.valueOf("2001-12-24"));
 
 
-
+            AdresDAOPsql adresDAO = new AdresDAOPsql(con);
+            testAdresDAO(adresDAO, HU);
 
 
 
@@ -107,15 +108,14 @@ public class Main {
 
     }
 
-    private static void testAdresDAO(AdresDAO adao) throws SQLException {
+    private static void testAdresDAO(AdresDAOPsql adresDAO, Adres HU) throws SQLException {
         System.out.println("\n---------- Test ReizigerDAO -------------");
-        Connection con = DriverManager.getConnection("jdbc:postgresql://localhost/ovchip?user=postgres&password=wachtwoord");
 
 
         // OPDRACHT P3 TESTS
-        AdresDAOPsql adresDAO = new AdresDAOPsql(con);
 
-        //adresDAO.save(HU);
+
+        adresDAO.save(HU);
 
         //adresDAO.delete(HU);
 
