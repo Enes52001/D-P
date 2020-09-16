@@ -45,7 +45,7 @@ public class Main {
 
 
 
-
+            con.close();
 
         } catch (SQLException e) {
             System.err.println("er is een fout opgetreden: " + e.getMessage());
