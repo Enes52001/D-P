@@ -16,7 +16,7 @@ public class ReizigerDAOPsql implements ReizigerDAO {
     @Override
     public boolean save(Reiziger r)  {
         try{
-            PreparedStatement stm = con.prepareStatement("insert into reiziger (reiziger_id, voorletters, tussenvoegsel, achternaam, geboortedatum) \nvalues (?, '?', '?', '?', TO_DATE('?', 'yyyy-mm-dd'))");
+            PreparedStatement stm = con.prepareStatement("insert into reiziger (reiziger_id, voorletters, tussenvoegsel, achternaam, geboortedatum) \nvalues (?, ?, ?, ?, TO_DATE(?, 'yyyy-mm-dd'))");
             stm.setInt(1, r.getId());
             stm.setString(2, r.getVoorletters());
             stm.setString(3, r.getTussenvoegsel());
@@ -50,7 +50,7 @@ public class ReizigerDAOPsql implements ReizigerDAO {
     @Override
     public boolean update(Reiziger r){
         try {
-            PreparedStatement stm = con.prepareStatement("update reiziger set voorletters = '?', tussenvoegsel = '?', achternaam = '?', geboortedatum = '?' where reiziger_id = ?");
+            PreparedStatement stm = con.prepareStatement("update reiziger set voorletters = ?, tussenvoegsel = ?, achternaam = ?, geboortedatum = ? where reiziger_id = ?");
             stm.setString(1, r.getVoorletters());
             stm.setString(2, r.getTussenvoegsel());
             stm.setString(3, r.getAchternaam());
@@ -85,7 +85,7 @@ public class ReizigerDAOPsql implements ReizigerDAO {
     public List<Reiziger> findByGbDatum(String datum) {
         try{
             List<Reiziger> lijst = new ArrayList<>();
-            PreparedStatement stm = con.prepareStatement("select * from reiziger where geboortedatum = TO_DATE('?', 'yyyy-mm-dd')");
+            PreparedStatement stm = con.prepareStatement("select * from reiziger where geboortedatum = TO_DATE(?, 'yyyy-mm-dd')");
             stm.setString(1, datum);
             ResultSet result = stm.executeQuery();
             while(result.next()){

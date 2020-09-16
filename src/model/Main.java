@@ -41,10 +41,10 @@ public class Main {
 
 
             AdresDAOPsql adresDAO = new AdresDAOPsql(con);
-            testAdresDAO(adresDAO, HU);
+            testAdresDAO(adresDAO, HU, Jan);
 
-
-
+            ReizigerDAOPsql reizigerDAO = new ReizigerDAOPsql(con);
+            testReizigerDAO(reizigerDAO, Jan);
             con.close();
 
         } catch (SQLException e) {
@@ -59,11 +59,11 @@ public class Main {
      *
      * @throws SQLException
      */
-    private static void testReizigerDAO(ReizigerDAO rdao) throws SQLException {
+    private static void testReizigerDAO(ReizigerDAO rdao, Reiziger reiziger) throws SQLException {
         System.out.println("\n---------- Test ReizigerDAO -------------");
-        Connection con = DriverManager.getConnection("jdbc:postgresql://localhost/ovchip?user=postgres&password=wachtwoord");
 
-        Statement stm = con.createStatement();
+//        Connection con = DriverManager.getConnection("jdbc:postgresql://localhost/ovchip?user=postgres&password=wachtwoord");
+//        Statement stm = con.createStatement();
 
 
         // Haal alle reizigers op uit de database
@@ -76,6 +76,7 @@ public class Main {
 
         // Maak een nieuwe reiziger aan en persisteer deze in de database
         String gbdatum = "1981-03-14";
+
         Reiziger sietske = new Reiziger(77, "S", "", "Boers", java.sql.Date.valueOf(gbdatum));
         System.out.print("[Test] Eerst " + reizigers.size() + " reizigers, na ReizigerDAO.save() ");
         rdao.save(sietske);
@@ -87,35 +88,33 @@ public class Main {
         // EIGEN CRUD TESTS, je kan een voor een de dubbele slash's weghalen en uittesten
 
         //opdracht p2 tests
-        ReizigerDAOPsql reizigerDAO = new ReizigerDAOPsql(con);
 
         // SAVE FUNCTIE
-        // reizigerDAO.save(Jan);
+        //rdao.save(reiziger);
 
         // DELETE FUNCTIE
-        //reizigerDAO.delete(Jan);
+        //rdao.delete(reiziger);
 
         // UPDATE FUNCTIE
-        //Jan.setAchternaam("Holland");
-        //Jan.setGeboortedatum(java.sql.Date.valueOf("1999-10-04"));
-        //reizigerDAO.update(Jan);
+        //reiziger.setAchternaam("Holland");
+        //reiziger.setGeboortedatum(java.sql.Date.valueOf("1999-10-04"));
+        //rdao.update(reiziger);
 
         // FIND FUNCTIES
-        //System.out.println(reizigerDAO.findById(3));
-        //System.out.println(reizigerDAO.findByGbDatum("2002-09-17"));
-        //System.out.println(reizigerDAO.findAll());
+        //System.out.println(rdao.findById(3));
+        //System.out.println(rdao.findByGbDatum("2002-09-17"));
+        //System.out.println(rdao.findAll());
 
 
     }
 
-    private static void testAdresDAO(AdresDAOPsql adresDAO, Adres HU) throws SQLException {
-        System.out.println("\n---------- Test ReizigerDAO -------------");
-
+    private static void testAdresDAO(AdresDAO adresDAO, Adres HU, Reiziger reiziger) throws SQLException {
+        System.out.println("\n---------- Test AdresDAO -------------");
+        HU.setReiziger(reiziger);
 
         // OPDRACHT P3 TESTS
 
-
-        adresDAO.save(HU);
+        //adresDAO.save(HU);
 
         //adresDAO.delete(HU);
 

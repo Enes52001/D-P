@@ -18,7 +18,7 @@ public class OVChipkaartDAOPsql implements OVChipkaartDAO {
     @Override
     public boolean save(OVChipkaart o) {
         try{
-                    PreparedStatement stm = con.prepareStatement("insert into ov_chipkaart (kaartnummer, geldig_tot, klasse, saldo, reiziger_id) \nvalues (?, '?', TO_DATE('?', 'yyyy-mm-dd')), '?', '?'");
+                    PreparedStatement stm = con.prepareStatement("insert into ov_chipkaart (kaartnummer, geldig_tot, klasse, saldo, reiziger_id) \nvalues (?, ?, TO_DATE(?, 'yyyy-mm-dd')), ?, ?");
             stm.setInt(1, o.getKaartnummer());
             stm.setDate(2, o.getGeldig_tot());
             stm.setInt(3, o.getKlasse());
@@ -53,7 +53,7 @@ public class OVChipkaartDAOPsql implements OVChipkaartDAO {
     @Override
     public boolean update(OVChipkaart o) {
         try {
-            PreparedStatement stm = con.prepareStatement("update ov_chipkaart set geldig_tot = '?', klasse = '?', saldo = '?', reiziger_id = '?' where kaartnummer = ?");
+            PreparedStatement stm = con.prepareStatement("update ov_chipkaart set geldig_tot = ?, klasse = ?, saldo = ?, reiziger_id = ? where kaartnummer = ?");
             stm.setDate(1, o.getGeldig_tot());
             stm.setInt(2, o.getKlasse());
             stm.setDouble(3, o.getSaldo());

@@ -18,7 +18,7 @@ public class AdresDAOPsql implements AdresDAO {
     public boolean save(Adres a) {
         try{
             PreparedStatement stm = con.prepareStatement("insert into adres (adres_id, postcode, huisnummer, straat, woonplaats, reiziger_id) \nvalues " +
-                    "( '?', '?', '?', '?', '?', ?)");
+                    "( ?, ?, ?, ?, ?, ?)");
             stm.setInt(1, a.getAdres_id());
             stm.setString(2, a.getPostcode());
             stm.setString(3, a.getHuisnummer());
@@ -54,8 +54,8 @@ public class AdresDAOPsql implements AdresDAO {
     @Override
     public boolean update(Adres a) {
         try {
-            PreparedStatement stm = con.prepareStatement("update adres set postcode = '?', " +
-                    "huisnummer = '?', straat = '?', woonplaats = '?' where adres_id = ?");
+            PreparedStatement stm = con.prepareStatement("update adres set postcode = ?, " +
+                    "huisnummer = ?, straat = ?, woonplaats = ? where adres_id = ?");
             stm.setString(1, a.getPostcode());
             stm.setString(2, a.getHuisnummer());
             stm.setString(3, a.getStraat());
