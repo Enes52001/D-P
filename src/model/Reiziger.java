@@ -74,6 +74,6 @@ public class Reiziger {
         return
                 "id = " + id +
                 " naam:'" + voorletters +" "+ tv +" "+ achternaam +
-                ", geboortedatum:" + geboortedatum+"\n";
+                ", geboortedatum: " + geboortedatum;
     }
 }

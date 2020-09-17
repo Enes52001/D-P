@@ -18,7 +18,8 @@ public class OVChipkaartDAOPsql implements OVChipkaartDAO {
     @Override
     public boolean save(OVChipkaart o) {
         try{
-                    PreparedStatement stm = con.prepareStatement("insert into ov_chipkaart (kaartnummer, geldig_tot, klasse, saldo, reiziger_id) \nvalues (?, ?, TO_DATE(?, 'yyyy-mm-dd')), ?, ?");
+            PreparedStatement stm = con.prepareStatement("insert into ov_chipkaart (kaart_nummer, geldig_tot, klasse, saldo, reiziger_id) " +
+                    "\nvalues (?, TO_DATE(?, 'yyyy-mm-dd'), ?, ?, ?)");
             stm.setInt(1, o.getKaartnummer());
             stm.setDate(2, o.getGeldig_tot());
             stm.setInt(3, o.getKlasse());
@@ -37,7 +38,7 @@ public class OVChipkaartDAOPsql implements OVChipkaartDAO {
     public boolean delete(OVChipkaart o) {
         try{
 
-            PreparedStatement stm = con.prepareStatement("delete from ov_chipkaart where kaartnummer = ?");
+            PreparedStatement stm = con.prepareStatement("delete from ov_chipkaart where kaart_nummer = ?");
             stm.setInt(1, o.getKaartnummer());
 
             stm.executeUpdate();
@@ -53,13 +54,14 @@ public class OVChipkaartDAOPsql implements OVChipkaartDAO {
     @Override
     public boolean update(OVChipkaart o) {
         try {
-            PreparedStatement stm = con.prepareStatement("update ov_chipkaart set geldig_tot = ?, klasse = ?, saldo = ?, reiziger_id = ? where kaartnummer = ?");
+            PreparedStatement stm = con.prepareStatement("update ov_chipkaart set geldig_tot = ?, klasse = ?, saldo = ?, reiziger_id = ? where kaart_nummer = ?");
             stm.setDate(1, o.getGeldig_tot());
             stm.setInt(2, o.getKlasse());
             stm.setDouble(3, o.getSaldo());
             stm.setInt(4, o.getReiziger_id());
             stm.setInt(5, o.getKaartnummer());
             stm.executeUpdate();
+            System.out.println("OV is geupdate!");
             return true;
         } catch (SQLException e) {
             System.err.println("er ging iets mis: " + e.getMessage());
@@ -70,12 +72,12 @@ public class OVChipkaartDAOPsql implements OVChipkaartDAO {
     @Override
     public OVChipkaart findByKaartnummer(int knummer) {
             try{
-                PreparedStatement stm = con.prepareStatement("select * from ov_chipkaart where kaartnummer = ?");
+                PreparedStatement stm = con.prepareStatement("select * from ov_chipkaart where kaart_nummer = ?");
                 stm.setInt(1, knummer);
                 ResultSet result = stm.executeQuery();
                 result.next();
                 System.out.println("ov chipkaart met kaartnummer "+ knummer + " is gevonden!");
-                return new OVChipkaart(result.getInt("kaartnummer"), result.getDate("geldig_tot"), result.getInt("klasse"), result.getDouble("saldo"));
+                return new OVChipkaart(result.getInt("kaart_nummer"), result.getDate("geldig_tot"), result.getInt("klasse"), result.getDouble("saldo"));
             }catch(SQLException e){
                 System.err.println("er ging iets mis: "+e.getMessage());
                 return null;
@@ -89,7 +91,7 @@ public class OVChipkaartDAOPsql implements OVChipkaartDAO {
             PreparedStatement stm = con.prepareStatement("select * from ov_chipkaart");
             ResultSet result = stm.executeQuery();
             while(result.next()){
-                lijst.add(new OVChipkaart(result.getInt("kaartnummer"), result.getDate("geldig_tot"), result.getInt("klasse"), result.getDouble("saldo")));
+                lijst.add(new OVChipkaart(result.getInt("kaart_nummer"), result.getDate("geldig_tot"), result.getInt("klasse"), result.getDouble("saldo")));
             }
             return lijst;
         }catch(SQLException e){

@@ -7,7 +7,7 @@ public class OVChipkaart {
     private Date geldig_tot;
     private int klasse;
     private Double saldo;
-    private Reiziger reiziger;
+    private static Reiziger reiziger;
 
     public OVChipkaart(int kaartummer, Date geldig_tot, int klasse, Double saldo){
         this.kaartnummer = kaartummer;
@@ -32,6 +32,7 @@ public class OVChipkaart {
         this.geldig_tot = geldig_tot;
     }
 
+
     public int getKlasse() {
         return klasse;
     }
@@ -46,6 +47,16 @@ public class OVChipkaart {
 
     public void setSaldo(Double saldo) {
         this.saldo = saldo;
+    }
+
+    @Override
+    public String toString() {
+        return "OVChipkaart{" +
+                "kaartnummer=" + kaartnummer +
+                ", geldig_tot=" + geldig_tot +
+                ", klasse=" + klasse +
+                ", saldo=" + saldo +
+                '}'+ "\n";
     }
 
     public int getReiziger_id() {

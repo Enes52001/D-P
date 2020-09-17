@@ -38,13 +38,22 @@ public class Main {
 
             Adres HU = new Adres(6, "2345CJ", "15", "Heidelberglaan", "Utrecht");
             Reiziger Jan = new Reiziger(6, "J", "van", "Leeuwen", java.sql.Date.valueOf("2001-12-24"));
+            OVChipkaart ov = new OVChipkaart(52, java.sql.Date.valueOf("2031-12-24"), 1, 50.0);
+
+//            tests voor adres
+//            AdresDAOPsql adresDAO = new AdresDAOPsql(con);
+//            testAdresDAO(adresDAO, HU, Jan);
+
+//            tests voor reiziger
+//            ReizigerDAOPsql reizigerDAO = new ReizigerDAOPsql(con);
+//            testReizigerDAO(reizigerDAO, Jan);
+
+//            tests voor ov chipkaart;
+            OVChipkaartDAOPsql OVDAO = new OVChipkaartDAOPsql(con);
+            testOVChipkaartDao(OVDAO, ov, Jan);
 
 
-            AdresDAOPsql adresDAO = new AdresDAOPsql(con);
-            testAdresDAO(adresDAO, HU, Jan);
 
-            ReizigerDAOPsql reizigerDAO = new ReizigerDAOPsql(con);
-            testReizigerDAO(reizigerDAO, Jan);
             con.close();
 
         } catch (SQLException e) {
@@ -62,8 +71,6 @@ public class Main {
     private static void testReizigerDAO(ReizigerDAO rdao, Reiziger reiziger) throws SQLException {
         System.out.println("\n---------- Test ReizigerDAO -------------");
 
-//        Connection con = DriverManager.getConnection("jdbc:postgresql://localhost/ovchip?user=postgres&password=wachtwoord");
-//        Statement stm = con.createStatement();
 
 
         // Haal alle reizigers op uit de database
@@ -127,6 +134,26 @@ public class Main {
         //System.out.println(adresDAO.findByReizigerId(6));
 
         //System.out.println(adresDAO.findAll());
+    }
+
+    private static void testOVChipkaartDao(OVChipkaartDAO ovdao, OVChipkaart ov, Reiziger reiziger) throws SQLException {
+        System.out.println("\n---------- Test OVDAO -------------");
+        ov.setReiziger(reiziger);
+
+        // OPDRACHT P4 TESTS
+
+        //ovdao.save(ov);
+
+        //ovdao.delete(ov);
+
+        //ov.setSaldo(10.0);
+        //ov.setKlasse(2);
+        //ovdao.update(ov);
+
+        //System.out.println(ovdao.findAll().toString());
+
+        //System.out.println(ovdao.findByKaartnummer(46392));
+
     }
 }
 
