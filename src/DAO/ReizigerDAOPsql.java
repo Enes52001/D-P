@@ -1,5 +1,7 @@
 package DAO;
 
+import model.Adres;
+import model.OVChipkaart;
 import model.Reiziger;
 
 import java.sql.*;
@@ -9,6 +11,7 @@ import java.util.List;
 public class ReizigerDAOPsql implements ReizigerDAO {
     private Connection con;
     private AdresDAO adao;
+    private OVChipkaartDAO odao;
     public ReizigerDAOPsql(Connection conn) throws SQLException {
         this.con = conn;
     }
@@ -73,8 +76,12 @@ public class ReizigerDAOPsql implements ReizigerDAO {
             stm.setInt(1, id);
             ResultSet result = stm.executeQuery();
             result.next();
+            Reiziger r = new Reiziger(result.getInt("reiziger_id"), result.getString("voorletters"),
+                    result.getString("tussenvoegsel"), result.getString("achternaam"), result.getDate("geboortedatum"));
             System.out.println("reiziger met ID "+ id + " is gevonden!");
-            return new Reiziger(result.getInt("reiziger_id"), result.getString("voorletters"), result.getString("tussenvoegsel"), result.getString("achternaam"), result.getDate("geboortedatum"));
+            r.setAdres(adao.findByReiziger(r));
+            r.addOV(odao.findByReiziger(r));
+            return r;
         }catch(SQLException e){
             System.err.println("er ging iets mis: "+e.getMessage());
             return null;
@@ -89,7 +96,11 @@ public class ReizigerDAOPsql implements ReizigerDAO {
             stm.setString(1, datum);
             ResultSet result = stm.executeQuery();
             while(result.next()){
-                lijst.add(new Reiziger(result.getInt("reiziger_id"), result.getString("voorletters"), result.getString("tussenvoegsel"), result.getString("achternaam"), result.getDate("geboortedatum")));
+                Reiziger reiziger = new Reiziger(result.getInt("reiziger_id"), result.getString("voorletters"),
+                        result.getString("tussenvoegsel"), result.getString("achternaam"), result.getDate("geboortedatum"));
+                reiziger.setAdres(adao.findByReiziger(reiziger));
+                reiziger.addOV(odao.findByReiziger(reiziger));
+                lijst.add(reiziger);
             }
             return lijst;
         }catch(SQLException e){
@@ -105,7 +116,11 @@ public class ReizigerDAOPsql implements ReizigerDAO {
             PreparedStatement stm = con.prepareStatement("select * from reiziger");
             ResultSet result = stm.executeQuery();
             while(result.next()){
-                lijst.add(new Reiziger(result.getInt("reiziger_id"), result.getString("voorletters"), result.getString("tussenvoegsel"), result.getString("achternaam"), result.getDate("geboortedatum")));
+                Reiziger reiziger = new Reiziger(result.getInt("reiziger_id"),
+                        result.getString("voorletters"), result.getString("tussenvoegsel"), result.getString("achternaam"), result.getDate("geboortedatum"));
+                reiziger.setAdres(adao.findByReiziger(reiziger));
+                reiziger.addOV(odao.findByReiziger(reiziger));
+                lijst.add(reiziger);
             }
             return lijst;
         }catch(SQLException e){
@@ -113,4 +128,5 @@ public class ReizigerDAOPsql implements ReizigerDAO {
             return null;
         }
     }
+
 }

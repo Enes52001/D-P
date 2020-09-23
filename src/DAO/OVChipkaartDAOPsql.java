@@ -12,6 +12,7 @@ import java.util.List;
 
 public class OVChipkaartDAOPsql implements OVChipkaartDAO {
     private Connection con;
+    private ReizigerDAO rdao;
     public OVChipkaartDAOPsql(Connection con) throws SQLException{
         this.con = con;
     }
@@ -76,8 +77,11 @@ public class OVChipkaartDAOPsql implements OVChipkaartDAO {
                 stm.setInt(1, knummer);
                 ResultSet result = stm.executeQuery();
                 result.next();
+                OVChipkaart ov =  new OVChipkaart(result.getInt("kaart_nummer"), result.getDate("geldig_tot"),
+                        result.getInt("klasse"), result.getDouble("saldo"));
+                ov.setReiziger(rdao.findById(result.getInt("reiziger_id")));
                 System.out.println("ov chipkaart met kaartnummer "+ knummer + " is gevonden!");
-                return new OVChipkaart(result.getInt("kaart_nummer"), result.getDate("geldig_tot"), result.getInt("klasse"), result.getDouble("saldo"));
+                return ov;
             }catch(SQLException e){
                 System.err.println("er ging iets mis: "+e.getMessage());
                 return null;
@@ -91,9 +95,32 @@ public class OVChipkaartDAOPsql implements OVChipkaartDAO {
             PreparedStatement stm = con.prepareStatement("select * from ov_chipkaart");
             ResultSet result = stm.executeQuery();
             while(result.next()){
-                lijst.add(new OVChipkaart(result.getInt("kaart_nummer"), result.getDate("geldig_tot"), result.getInt("klasse"), result.getDouble("saldo")));
+                OVChipkaart ov = new OVChipkaart(result.getInt("kaart_nummer"), result.getDate("geldig_tot"),
+                        result.getInt("klasse"), result.getDouble("saldo"));
+                ov.setReiziger(rdao.findById(result.getInt("reiziger_id")));
+                lijst.add(ov);
+
             }
             return lijst;
+        }catch(SQLException e){
+            System.err.println("er ging iets mis: "+e.getMessage());
+            return null;
+        }
+    }
+
+    @Override
+    public OVChipkaart findByReiziger(Reiziger r) {
+        try{
+            PreparedStatement stm = con.prepareStatement("select * from ov_chipkaart where reiziger_id = ?");
+            stm.setInt(1, r.getId());
+            ResultSet result = stm.executeQuery();
+            result.next();
+            OVChipkaart ov = new OVChipkaart(result.getInt("kaart_nummer"), result.getDate("geldig_tot"), result.getInt("klasse")
+                    , result.getDouble("saldo"));
+            result.getInt("reiziger_id");
+            ov.setReiziger(r);
+            System.out.println("Adres gekoppeld aan reizigers-ID "+ r.getId() + " is gevonden!");
+            return ov;
         }catch(SQLException e){
             System.err.println("er ging iets mis: "+e.getMessage());
             return null;

@@ -11,4 +11,5 @@ public interface OVChipkaartDAO {
     boolean update(OVChipkaart o);
     OVChipkaart findByKaartnummer(int kaartnummer);
     List<OVChipkaart> findAll();
+    OVChipkaart findByReiziger(Reiziger r);
 }

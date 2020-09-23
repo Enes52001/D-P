@@ -20,10 +20,21 @@ public class Reiziger {
         this.geboortedatum = g;
 
     }
-    
+
+    public List<OVChipkaart> getOv() {
+        return ov;
+    }
+
+    public void addOV(OVChipkaart ovc) {
+        ov.add(ovc);
+    }
 
     public int getId(){
         return id;
+    }
+
+    public void setAdres(Adres adres) {
+        this.adres = adres;
     }
 
     public void setAchternaam(String achternaam) {

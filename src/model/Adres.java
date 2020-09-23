@@ -6,7 +6,7 @@ public class Adres {
     private String huisnummer;
     private String straat;
     private String woonplaats;
-    private static Reiziger reiziger;
+    private Reiziger reiziger;
 
     public Adres(int adres_id, String postcode, String huisnr, String straat, String woonplaats){
         this.adres_id = adres_id;
@@ -16,8 +16,8 @@ public class Adres {
         this.woonplaats = woonplaats;
     }
 
-    public static void setReiziger(Reiziger reiziger) {
-        Adres.reiziger = reiziger;
+    public void setReiziger(Reiziger reiziger) {
+        this.reiziger = reiziger;
     }
 
     public Reiziger getReiziger() {

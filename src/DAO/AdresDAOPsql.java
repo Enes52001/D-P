@@ -77,9 +77,11 @@ public class AdresDAOPsql implements AdresDAO {
             stm.setInt(1, id);
             ResultSet result = stm.executeQuery();
             result.next();
+            Adres adres = new Adres(result.getInt("adres_id"), result.getString("postcode"), result.getString("huisnummer"),
+                    result.getString("straat"), result.getString("woonplaats"));
             System.out.println("Adres met ID "+ id + " is gevonden!");
-            return new Adres(result.getInt("adres_id"), result.getString("postcode"), result.getString("huisnummer"),
-                    result.getString("straat"), result.getString("woonplaats"));  //result.getInt("reiziger_id")   hier wordt geen reiziger_id meegegeven, hoort dit?
+            adres.setReiziger(rdao.findById(result.getInt("reiziger_id")));
+            return adres;
         }catch(SQLException e){
             System.err.println("er ging iets mis: "+e.getMessage());
             return null;
@@ -87,17 +89,17 @@ public class AdresDAOPsql implements AdresDAO {
     }
 
     @Override
-    public Adres findByReizigerId(int r) {
+    public Adres findByReiziger(Reiziger r) {
         try{
             PreparedStatement stm = con.prepareStatement("select * from adres where reiziger_id = ?");
-            stm.setInt(1, r);
+            stm.setInt(1, r.getId());
             ResultSet result = stm.executeQuery();
             result.next();
-
-            System.out.println("Adres gekoppeld aan reizigers-ID "+ r + " is gevonden!");
-            return new Adres(result.getInt("adres_id"), result.getString("postcode"), result.getString("huisnummer"),
+            Adres adres = new Adres(result.getInt("adres_id"), result.getString("postcode"), result.getString("huisnummer"),
                     result.getString("straat"), result.getString("woonplaats"));//  result.getInt("reiziger_id")
-
+            adres.setReiziger(r);
+            System.out.println("Adres gekoppeld aan reizigers-ID "+ r.getId() + " is gevonden!");
+            return adres;
         }catch(SQLException e){
             System.err.println("er ging iets mis: "+e.getMessage());
             return null;
@@ -111,7 +113,10 @@ public class AdresDAOPsql implements AdresDAO {
             PreparedStatement stm = con.prepareStatement("select * from adres");
             ResultSet result = stm.executeQuery();
             while(result.next()){
-                lijst.add(new Adres(result.getInt("adres_id"), result.getString("postcode"), result.getString("huisnummer"), result.getString("straat"), result.getString("woonplaats")));// result.getInt("reiziger_id")
+                Adres adres = new Adres(result.getInt("adres_id"), result.getString("postcode"),
+                        result.getString("huisnummer"), result.getString("straat"), result.getString("woonplaats"));
+                adres.setReiziger(rdao.findById(result.getInt("reiziger_id")));
+                lijst.add(adres);
             }
             return lijst;
         }catch(SQLException e){

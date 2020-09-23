@@ -7,7 +7,7 @@ public class OVChipkaart {
     private Date geldig_tot;
     private int klasse;
     private Double saldo;
-    private static Reiziger reiziger;
+    private Reiziger reiziger;
 
     public OVChipkaart(int kaartummer, Date geldig_tot, int klasse, Double saldo){
         this.kaartnummer = kaartummer;
@@ -71,4 +71,6 @@ public class OVChipkaart {
     public void setReiziger(Reiziger reiziger) {
         this.reiziger = reiziger;
     }
+
+
 }

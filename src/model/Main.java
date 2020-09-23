@@ -49,9 +49,8 @@ public class Main {
 //            testReizigerDAO(reizigerDAO, Jan);
 
 //            tests voor ov chipkaart;
-            OVChipkaartDAOPsql OVDAO = new OVChipkaartDAOPsql(con);
-            testOVChipkaartDao(OVDAO, ov, Jan);
-
+//            OVChipkaartDAOPsql OVDAO = new OVChipkaartDAOPsql(con);
+//            testOVChipkaartDao(OVDAO, ov, Jan);
 
 
             con.close();
