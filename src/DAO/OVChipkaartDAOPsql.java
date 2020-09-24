@@ -13,6 +13,7 @@ import java.util.List;
 public class OVChipkaartDAOPsql implements OVChipkaartDAO {
     private Connection con;
     private ReizigerDAO rdao;
+    private ProductDAO pdao;
     public OVChipkaartDAOPsql(Connection con) throws SQLException{
         this.con = con;
     }
