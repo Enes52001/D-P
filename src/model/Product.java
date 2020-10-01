@@ -1,11 +1,13 @@
 package model;
 
+import java.util.ArrayList;
+
 public class Product {
     private int product_nummer;
     private String naam;
     private String beschrijving;
     private double prijs;
-    private OVChipkaart ov;
+    private ArrayList<OVChipkaart> ov;
 
     public Product(int product_nummer, String naam, String beschrijving, double prijs){
         this.product_nummer = product_nummer;
@@ -18,9 +20,10 @@ public class Product {
         return prijs;
     }
 
-    public void setOv(OVChipkaart ov) {
-        this.ov = ov;
+    public void addOv(OVChipkaart ov) {
+        this.ov.add(ov);
     }
+
 
     public int getProduct_nummer() {
         return product_nummer;
@@ -32,5 +35,9 @@ public class Product {
 
     public String getNaam() {
         return naam;
+    }
+
+    public ArrayList<OVChipkaart> getOv() {
+        return ov;
     }
 }

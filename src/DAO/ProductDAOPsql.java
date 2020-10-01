@@ -40,12 +40,6 @@ public class ProductDAOPsql implements ProductDAO{
             stm.setInt(4, p.getProduct_nummer());
             stm.executeUpdate();
 
-            PreparedStatement stm2 = con.prepareStatement("update ov_chipkaart_product set status = ?, last_update = ? where product_nummer = ?");
-            stm.setString(1, status);
-            stm.setDate(2, last_update);
-            stm.setInt(3, p.getProduct_nummer());
-            stm2.executeUpdate();
-
             System.out.println("Product is succesvol geupdate!");
             return true;
         }catch(SQLException e){
@@ -85,9 +79,7 @@ public class ProductDAOPsql implements ProductDAO{
 
             Product p = new Product(result2.getInt("productnummer"), result2.getString("naam"), result2.getString("beschrijving"), result2.getDouble("prijs"));
             System.out.println("Product dat behoort aan kaartnummer "+ ov.getKaartnummer() + " is gevonden!");
-            ov.setProduct(p);
-            p.setOv(ov);
-            // welke van deze 2 hierboven is handiger om te gebruiken?
+            p.addOv(ov);
             return p;
         }catch(SQLException e){
             System.err.println("er ging iets mis: "+e.getMessage());
