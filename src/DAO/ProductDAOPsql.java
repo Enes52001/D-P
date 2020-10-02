@@ -5,6 +5,8 @@ import model.Product;
 import model.Reiziger;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProductDAOPsql implements ProductDAO{
     private Connection con;
@@ -67,7 +69,7 @@ public class ProductDAOPsql implements ProductDAO{
     @Override
     public Product findByOvChipkaart(OVChipkaart ov) {
         try{
-            PreparedStatement stm = con.prepareStatement("select * from ov_chipkaart_product where kaartnummer = ?");
+            PreparedStatement stm = con.prepareStatement("select * from ov_chipkaart left join ov_chipkaart_product on kaartnummer = ?");
             stm.setInt(1, ov.getKaartnummer());
             ResultSet result = stm.executeQuery();
             result.next();
@@ -76,8 +78,7 @@ public class ProductDAOPsql implements ProductDAO{
             stm.setInt(1, result.getInt("productnummer"));
             ResultSet result2 = stm2.executeQuery();
             result2.next();
-
-            Product p = new Product(result2.getInt("productnummer"), result2.getString("naam"), result2.getString("beschrijving"), result2.getDouble("prijs"));
+            Product p = new Product(result2.getInt("product_nummer"), result2.getString("naam"), result2.getString("beschrijving"), result2.getDouble("prijs"));
             System.out.println("Product dat behoort aan kaartnummer "+ ov.getKaartnummer() + " is gevonden!");
             p.addOv(ov);
             return p;
@@ -87,5 +88,31 @@ public class ProductDAOPsql implements ProductDAO{
         }
     }
 
+    @Override
+    public List<Product> findAll() {
+        try{
+            List<Product> lijst = new ArrayList<>();
+            PreparedStatement stm = con.prepareStatement("select * from Product");
+            ResultSet result = stm.executeQuery();
+            while(result.next()){
+                Product product = new Product(result.getInt("product_nummer"), result.getString("naam"), result.getString("beschrijving"), result.getDouble("prijs"));
+                lijst.add(product);
 
+                PreparedStatement stm2 = con.prepareStatement("select * \n" +
+                        "from ov_chipkaart \n" +
+                        "where kaart_nummer in(select kaart_nummer\n" +
+                        "\t\t\t\t\t from ov_chipkaart_product\n" +
+                        "\t\t\t\t\t where product_nummer = ?)");
+                stm.setInt(1, result.getInt("productnummer"));
+                ResultSet result2 = stm2.executeQuery();
+                result2.next();
+                OVChipkaart ov = new OVChipkaart(result2.getInt("kaart_nummer"), result2.getDate("geldig_tot"), result2.getInt("Klasse"), result2.getDouble("saldo"));
+                product.addOv(ov);
+            }
+            return lijst;
+        }catch(SQLException e){
+            System.err.println("er ging iets mis: "+e.getMessage());
+            return null;
+        }
+    }
 }

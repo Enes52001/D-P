@@ -1,6 +1,7 @@
 package DAO;
 
 import model.OVChipkaart;
+import model.Product;
 import model.Reiziger;
 
 import java.sql.Connection;
@@ -78,8 +79,20 @@ public class OVChipkaartDAOPsql implements OVChipkaartDAO {
                 stm.setInt(1, knummer);
                 ResultSet result = stm.executeQuery();
                 result.next();
+
+                PreparedStatement stm2 = con.prepareStatement("select * \n" +
+                        "from product \n" +
+                        "where product_nummer in(select product_nummer\n" +
+                        "\t\t\t\t\t from ov_chipkaart_product\n" +
+                        "\t\t\t\t\t where kaart_nummer = ?)");
+                stm.setInt(1, knummer);
+                ResultSet result2 = stm.executeQuery();
+                result2.next();
+
                 OVChipkaart ov =  new OVChipkaart(result.getInt("kaart_nummer"), result.getDate("geldig_tot"),
                         result.getInt("klasse"), result.getDouble("saldo"));
+                Product product = new Product(result2.getInt("product_nummer"), result2.getString("naam"), result2.getString("beschrijving"), result2.getDouble("prijs"));
+                ov.addProduct(product);
                 ov.setReiziger(rdao.findById(result.getInt("reiziger_id")));
                 System.out.println("ov chipkaart met kaartnummer "+ knummer + " is gevonden!");
                 return ov;
@@ -101,6 +114,16 @@ public class OVChipkaartDAOPsql implements OVChipkaartDAO {
                 ov.setReiziger(rdao.findById(result.getInt("reiziger_id")));
                 lijst.add(ov);
 
+                PreparedStatement stm2 = con.prepareStatement("select * \n" +
+                        "from product \n" +
+                        "where product_nummer in(select product_nummer\n" +
+                        "\t\t\t\t\t from ov_chipkaart_product\n" +
+                        "\t\t\t\t\t where kaart_nummer = ?)");
+                stm.setInt(1, result.getInt("kaart_nummer"));
+                ResultSet result2 = stm.executeQuery();
+                result2.next();
+                Product product = new Product(result2.getInt("product_nummer"), result2.getString("naam"), result2.getString("beschrijving"), result2.getDouble("prijs"));
+                ov.addProduct(product);
             }
             return lijst;
         }catch(SQLException e){
@@ -121,6 +144,18 @@ public class OVChipkaartDAOPsql implements OVChipkaartDAO {
             result.getInt("reiziger_id");
             ov.setReiziger(r);
             System.out.println("Adres gekoppeld aan reizigers-ID "+ r.getId() + " is gevonden!");
+
+            PreparedStatement stm2 = con.prepareStatement("select * \n" +
+                    "from product \n" +
+                    "where product_nummer in(select product_nummer\n" +
+                    "\t\t\t\t\t from ov_chipkaart_product\n" +
+                    "\t\t\t\t\t where kaart_nummer = ?)");
+            stm.setInt(1, result.getInt("kaart_nummer"));
+            ResultSet result2 = stm.executeQuery();
+            result2.next();
+            Product product = new Product(result2.getInt("product_nummer"), result2.getString("naam"), result2.getString("beschrijving"), result2.getDouble("prijs"));
+            ov.addProduct(product);
+
             return ov;
         }catch(SQLException e){
             System.err.println("er ging iets mis: "+e.getMessage());
