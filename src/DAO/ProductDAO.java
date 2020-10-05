@@ -9,8 +9,8 @@ import java.util.List;
 
 public interface ProductDAO {
     boolean save(Product p);
-    boolean update(Product p, String status, Date last_update);
+    boolean update(Product p);
     boolean delete(Product p);
-    Product findByOvChipkaart(OVChipkaart ov);
+    List<Product> findByOvChipkaart(OVChipkaart ov);
     List<Product> findAll();
 }
