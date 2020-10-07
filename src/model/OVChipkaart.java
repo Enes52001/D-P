@@ -31,6 +31,10 @@ public class OVChipkaart {
         return product;
     }
 
+    public void setProduct(ArrayList<Product> product) {
+        this.product = product;
+    }
+
     public void setKaartnummer(int kaartnummer) {
         this.kaartnummer = kaartnummer;
     }

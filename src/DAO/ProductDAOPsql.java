@@ -95,9 +95,9 @@ public class ProductDAOPsql implements ProductDAO{
     }
 
     @Override
-    public List<Product> findByOvChipkaart(OVChipkaart ov) {
+    public ArrayList<Product> findByOvChipkaart(OVChipkaart ov) {
         try{
-            List<Product> lijst = new ArrayList<>();
+            ArrayList<Product> lijst = new ArrayList<>();
             PreparedStatement stm = con.prepareStatement("select product.product_nummer, naam, beschrijving, prijs\n" +
                     "from product \n" +
                     "left join ov_chipkaart_product  \n" +

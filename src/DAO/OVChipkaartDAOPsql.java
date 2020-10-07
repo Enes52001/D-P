@@ -95,6 +95,8 @@ public class OVChipkaartDAOPsql implements OVChipkaartDAO {
                 ov.addProduct(product);
                 ov.setReiziger(rdao.findById(result.getInt("reiziger_id")));
                 System.out.println("ov chipkaart met kaartnummer "+ knummer + " is gevonden!");
+
+                ov.setProduct((ArrayList<Product>) pdao.findByOvChipkaart(ov));
                 return ov;
             }catch(SQLException e){
                 System.err.println("er ging iets mis: "+e.getMessage());
@@ -114,16 +116,7 @@ public class OVChipkaartDAOPsql implements OVChipkaartDAO {
                 ov.setReiziger(rdao.findById(result.getInt("reiziger_id")));
                 lijst.add(ov);
 
-                PreparedStatement stm2 = con.prepareStatement("select * \n" +
-                        "from product \n" +
-                        "where product_nummer in(select product_nummer\n" +
-                        "\t\t\t\t\t from ov_chipkaart_product\n" +
-                        "\t\t\t\t\t where kaart_nummer = ?)");
-                stm.setInt(1, result.getInt("kaart_nummer"));
-                ResultSet result2 = stm.executeQuery();
-                result2.next();
-                Product product = new Product(result2.getInt("product_nummer"), result2.getString("naam"), result2.getString("beschrijving"), result2.getDouble("prijs"));
-                ov.addProduct(product);
+                ov.setProduct((ArrayList<Product>) pdao.findByOvChipkaart(ov));
             }
             return lijst;
         }catch(SQLException e){
@@ -145,16 +138,7 @@ public class OVChipkaartDAOPsql implements OVChipkaartDAO {
             ov.setReiziger(r);
             System.out.println("Adres gekoppeld aan reizigers-ID "+ r.getId() + " is gevonden!");
 
-            PreparedStatement stm2 = con.prepareStatement("select * \n" +
-                    "from product \n" +
-                    "where product_nummer in(select product_nummer\n" +
-                    "\t\t\t\t\t from ov_chipkaart_product\n" +
-                    "\t\t\t\t\t where kaart_nummer = ?)");
-            stm.setInt(1, result.getInt("kaart_nummer"));
-            ResultSet result2 = stm.executeQuery();
-            result2.next();
-            Product product = new Product(result2.getInt("product_nummer"), result2.getString("naam"), result2.getString("beschrijving"), result2.getDouble("prijs"));
-            ov.addProduct(product);
+            ov.setProduct((ArrayList<Product>) pdao.findByOvChipkaart(ov));
 
             return ov;
         }catch(SQLException e){
